@@ -1,28 +1,16 @@
+const url = "http://localhost:5678/api/works";
+const allBtnFilter = document.querySelectorAll(".filter-btn");
 const gallery = document.querySelector(".gallery");
 const menuCategories = document.querySelector("#categories");
-
-const url = "http://localhost:5678/api/works";
+const btnGroup = document.querySelector(".button-group");
 
 let allWorks = [];
-
 
 // Au chargement de la page, on récupère les données de l'API
 window.addEventListener("load", () => {
     getData(url);
 });
 
-// (async () => {
-//     let res = await fetch("http://localhost:5678/api/works");
-//     let works = await res.json();
-//     console.log(works);
-//     const gallery = document.querySelector(".gallery");
-    
-//     gallery.innerHTML = ""
-
-//     for (const work of works) {
-//         console.log(work);
-//     }
-// })();
 
 async function getData(url) {
     try {
@@ -46,11 +34,10 @@ async function getData(url) {
 }
 
 function createGalleryItem(works) {
-    gallery.innerHTML = ""
+    gallery.innerHTML = "";
    
     for (const work of works) {
-        // console.log(work);
-        // console.log(work.category);
+
         const figure = document.createElement("figure");
         const img = document.createElement("img");
         const figcaption = document.createElement("figcaption");
@@ -65,31 +52,38 @@ function createGalleryItem(works) {
     }
 }
 
-function createCategoryMenu(categories) {
-    const categoryList = categories.map(e => e.category.name);
-    // console.log(categoryList);
+function createCategoryMenu(works) {
+    const categoryList = works.map(e => e.category.name);
     const uniqueCategories = [...new Set(categoryList)];
-    // console.log(uniqueCategories);
 
+    // Bouton pour toutes les catégories
+    const btnAll = document.createElement("button");
+    btnAll.textContent = "Tous";
+    btnAll.classList.add("filter-btn");
+    btnAll.dataset.category = "all";
+    btnAll.addEventListener('click', () => {
+        filterWorksByCategory("all");
+    });
+    btnGroup.appendChild(btnAll);
+
+    // Boutons pour chaque catégorie
     for (const category of uniqueCategories) {
-        const menuItem = document.createElement("option");
-        menuItem.value = category;
-        menuItem.textContent = category;
-        menuCategories.appendChild(menuItem);
+        const btn = document.createElement("button");
+        btn.textContent = category;
+        btn.classList.add("filter-btn");
+        btn.dataset.category = category;
+        btn.addEventListener('click', () => {
+            filterWorksByCategory(category);
+        });
+        btnGroup.appendChild(btn);
     }
 }
 
-menuCategories.addEventListener("change", (event) => {
-    const selectedCategory = event.target.value;
-    // console.log("Selected Category:", selectedCategory);
-    
-    if (selectedCategory === "all") {
-        createGalleryItem(allWorks); // Afficher tous les travaux si "Toutes les catégories" est sélectionné
+function filterWorksByCategory(category) {
+    if (category === "all") {
+        createGalleryItem(allWorks); // Supposant que allWorks est votre variable globale contenant tous les travaux
     } else {
-        const filteredWorks = allWorks.filter(e => e.category.name === selectedCategory);
-        console.log("Filtered Works:", filteredWorks);
-        createGalleryItem(filteredWorks); // Afficher les travaux filtrés
+        const filteredWorks = allWorks.filter(e => e.category.name === category);
+        createGalleryItem(filteredWorks);
     }
-});
-
-
+}

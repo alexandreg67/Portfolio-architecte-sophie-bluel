@@ -1,14 +1,25 @@
 const url = "http://localhost:5678/api/works";
+
 const allBtnFilter = document.querySelectorAll(".filter-btn");
 const gallery = document.querySelector(".gallery");
 const menuCategories = document.querySelector("#categories");
 const btnGroup = document.querySelector(".button-group");
+const login = document.querySelector(".lienLogin");
+const logout = document.querySelector(".lienLogout");
+const projets = document.querySelector(".lienProjets");
+const loginForm = document.querySelector('form');
+const modifier = document.querySelector(".modifier");
 
 let allWorks = [];
 
 // Au chargement de la page, on récupère les données de l'API
 window.addEventListener("load", () => {
     getData(url);
+    displayLoggedInUser();
+});
+
+login.addEventListener('click', () => {
+    window.location.href = './connexion.html';
 });
 
 
@@ -87,3 +98,29 @@ function filterWorksByCategory(category) {
         createGalleryItem(filteredWorks);
     }
 }
+
+function displayLoggedInUser() {
+    if (localStorage.getItem('token')) {
+        console.log("j'ai un token");
+        // Un token est présent, l'utilisateur est connecté
+        modifier.style.display = 'inline-block';
+        login.style.display = 'none';
+    } else {
+        console.log("je n'ai pas de token");
+        // Pas de token, l'utilisateur n'est pas connecté ou la session a expiré
+        modifier.style.display = 'none';
+        logout.style.display = 'none';
+    }
+    
+}
+
+login.addEventListener('click', () => {
+    window.location.href = './connexion.html';
+});
+
+logout.addEventListener('click', () => {
+    console.log("je supprime le token");
+    localStorage.removeItem('token');
+    logout.style.display = 'none';
+    window.location.href = './index.html';
+});

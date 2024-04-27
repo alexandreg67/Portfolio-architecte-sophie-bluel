@@ -9,6 +9,8 @@ const logout = document.querySelector(".lienLogout");
 const projets = document.querySelector(".lienProjets");
 const loginForm = document.querySelector('form');
 const modifier = document.querySelector(".modifier");
+const modal = document.querySelector("#modal");
+const close = document.querySelector(".close");
 
 let allWorks = [];
 
@@ -21,6 +23,21 @@ window.addEventListener("load", () => {
 login.addEventListener('click', () => {
     window.location.href = './connexion.html';
 });
+
+modifier.addEventListener('click', () => {
+    console.log("je clique sur modifier");
+    modal.style.display = "block";
+});
+
+close.addEventListener('click', () => {
+    modal.style.display = "none";
+});
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
 
 
 async function getData(url) {
@@ -45,8 +62,10 @@ async function getData(url) {
 }
 
 function createGalleryItem(works) {
+    // On vide la galerie
     gallery.innerHTML = "";
    
+    // On crée les éléments de la galerie
     for (const work of works) {
 
         const figure = document.createElement("figure");
@@ -64,6 +83,7 @@ function createGalleryItem(works) {
 }
 
 function createCategoryMenu(works) {
+    // On récupère les catégories uniques
     const categoryList = works.map(e => e.category.name);
     const uniqueCategories = [...new Set(categoryList)];
 
@@ -92,7 +112,7 @@ function createCategoryMenu(works) {
 
 function filterWorksByCategory(category) {
     if (category === "all") {
-        createGalleryItem(allWorks); // Supposant que allWorks est votre variable globale contenant tous les travaux
+        createGalleryItem(allWorks);
     } else {
         const filteredWorks = allWorks.filter(e => e.category.name === category);
         createGalleryItem(filteredWorks);
@@ -111,16 +131,16 @@ function displayLoggedInUser() {
         modifier.style.display = 'none';
         logout.style.display = 'none';
     }
+
+    login.addEventListener('click', () => {
+        window.location.href = './connexion.html';
+    });
     
+    logout.addEventListener('click', () => {
+        // console.log("je supprime le token");
+        localStorage.removeItem('token');
+        logout.style.display = 'none';
+        window.location.href = './index.html';
+    });
 }
 
-login.addEventListener('click', () => {
-    window.location.href = './connexion.html';
-});
-
-logout.addEventListener('click', () => {
-    console.log("je supprime le token");
-    localStorage.removeItem('token');
-    logout.style.display = 'none';
-    window.location.href = './index.html';
-});

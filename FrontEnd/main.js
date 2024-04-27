@@ -11,6 +11,7 @@ const loginForm = document.querySelector('form');
 const modifier = document.querySelector(".modifier");
 const modal = document.querySelector("#modal");
 const close = document.querySelector(".close");
+const modalGallery = document.querySelector(".modal-gallery");
 
 let allWorks = [];
 
@@ -27,6 +28,17 @@ login.addEventListener('click', () => {
 modifier.addEventListener('click', () => {
     console.log("je clique sur modifier");
     modal.style.display = "block";
+    modalGallery.innerHTML = "";
+    for (const work of allWorks) {
+        // console.log("je suis dans la boucle et je log work", work);
+        const img = document.createElement("img");
+
+        img.src = work.imageUrl;
+        img.alt = work.title;
+
+        modalGallery.appendChild(img);
+    }
+
 });
 
 close.addEventListener('click', () => {

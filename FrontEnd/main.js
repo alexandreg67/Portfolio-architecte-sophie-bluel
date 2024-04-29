@@ -10,8 +10,6 @@ const projets = document.querySelector(".lienProjets");
 const loginForm = document.querySelector('form');
 const modifier = document.querySelector(".modifier");
 const modal = document.querySelector("#modal");
-const close = document.querySelector(".close");
-const modalGallery = document.querySelector(".modal-gallery");
 
 let allWorks = [];
 
@@ -26,11 +24,26 @@ login.addEventListener('click', () => {
 });
 
 modifier.addEventListener('click', () => {
-    console.log("je clique sur modifier");
+
     modal.style.display = "block";
+
+    const modalContent = document.querySelector(".modal-content");
+    modalContent.innerHTML = ""; 
+
+    const spanClose = document.createElement("span");
+    spanClose.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    spanClose.classList.add("close");
+    modalContent.appendChild(spanClose);
+
+    const titreModal = document.createElement("h2");
+    titreModal.textContent = "Galerie photo";
+    modalContent.appendChild(titreModal); 
+    
+    const modalGallery = document.createElement("div");
+    modalGallery.classList.add("modal-gallery");
     modalGallery.innerHTML = "";
+
     for (const work of allWorks) {
-        // console.log("je suis dans la boucle et je log work", work);
         const img = document.createElement("img");
 
         img.src = work.imageUrl;
@@ -39,11 +52,90 @@ modifier.addEventListener('click', () => {
         modalGallery.appendChild(img);
     }
 
+    modalContent.appendChild(modalGallery);
+
+    const separator = document.createElement("div");
+    separator.classList.add("separator");
+    modalContent.appendChild(separator);
+
+    const btnAddPhoto = document.createElement("button");
+    btnAddPhoto.classList.add("add-photo");
+    btnAddPhoto.textContent = "Ajouter une photo";
+
+    modalContent.appendChild(btnAddPhoto);
+
+
+    btnAddPhoto.addEventListener('click', () => {
+        // console.log("je clique sur ajouter une photo");
+        modalContent.innerHTML = "";
+
+        const spanClose = document.createElement("span");
+        spanClose.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        spanClose.classList.add("close");
+        modalContent.appendChild(spanClose);
+
+        const spanArrow = document.createElement("span");
+        spanArrow.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+        spanArrow.classList.add("arrow-left");
+        spanArrow.style.display = "block";
+        modalContent.appendChild(spanArrow);
+        
+        titreModal.textContent = "Ajouter une photo";
+        modalContent.appendChild(titreModal);
+
+        const form = document.createElement("form");
+        form.classList.add("add-photo-content");
+        form.action = "#"; // Assurez-vous de mettre l'URL appropriée pour traiter les données du formulaire
+        form.method = "post";
+
+        // Création et ajout des champs Nom
+        const nameLabel = document.createElement("label");
+        nameLabel.classList.add("label");
+        nameLabel.setAttribute("for", "titre");
+        nameLabel.textContent = "Titre";
+        form.appendChild(nameLabel);
+
+        const nameInput = document.createElement("input");
+        nameInput.classList.add("input");
+        nameInput.type = "text";
+        nameInput.name = "titre";
+        nameInput.id = "titre";
+        form.appendChild(nameInput);
+
+
+
+
+        // Création et ajout du bouton Envoyer
+        const submitInput = document.createElement("input");
+        submitInput.type = "submit";
+        submitInput.value = "Valider";
+        form.appendChild(submitInput);
+
+        modalContent.appendChild(form);
+
+        
+
+        spanClose.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
+
+        spanArrow.addEventListener('click', () => {
+            modalContent.innerHTML = "";
+            modalContent.appendChild(spanClose);
+            modalContent.appendChild(titreModal);
+            modalContent.appendChild(modalGallery);
+            modalContent.appendChild(separator);
+            modalContent.appendChild(btnAddPhoto);
+        });
+    });
+
+    spanClose.addEventListener('click', () => {
+        modal.style.display = "none";
+    });
 });
 
-close.addEventListener('click', () => {
-    modal.style.display = "none";
-});
+
+
 
 window.onclick = function(event) {
     if (event.target === modal) {
@@ -133,7 +225,6 @@ function filterWorksByCategory(category) {
 
 function displayLoggedInUser() {
     if (localStorage.getItem('token')) {
-        console.log("j'ai un token");
         // Un token est présent, l'utilisateur est connecté
         modifier.style.display = 'inline-block';
         login.style.display = 'none';

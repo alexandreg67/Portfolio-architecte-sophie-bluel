@@ -101,6 +101,23 @@ modifier.addEventListener('click', () => {
         form.action = "#"; 
         form.method = "post";
 
+        // Création et ajout du champ photo
+        const containerAddPhoto = document.createElement("div");
+        containerAddPhoto.classList.add("container-add-photo");
+        const iconPicture = document.createElement("i");
+        iconPicture.classList.add("fa-regular", "fa-image");
+        containerAddPhoto.appendChild(iconPicture);
+        const btnAddPicture = document.createElement("button");
+        btnAddPicture.textContent = "+ Ajouter une photo";
+        btnAddPicture.classList.add("add-picture");
+        containerAddPhoto.appendChild(btnAddPicture);
+        const pAddPicture = document.createElement("p");
+        pAddPicture.classList.add("add-picture-info");
+        pAddPicture.textContent = "jpg. png : 4mo max";
+        containerAddPhoto.appendChild(pAddPicture);
+
+        form.appendChild(containerAddPhoto);
+
         // Création et ajout du champ titre
         const nameLabel = document.createElement("label");
         nameLabel.classList.add("label");
@@ -142,11 +159,11 @@ modifier.addEventListener('click', () => {
         modalContent.appendChild(separator);
 
         // Création et ajout du bouton Valider
-        const submitInput = document.createElement("input");
-        submitInput.type = "submit";
-        submitInput.value = "Valider";
-        submitInput.classList.add("add-photo");
-        modalContent.appendChild(submitInput);
+        const submitBtn = document.createElement("button");
+        submitBtn.type = "submit";
+        submitBtn.textContent = "Valider";
+        submitBtn.classList.add("add-photo");
+        modalContent.appendChild(submitBtn);
 
 
         spanClose.addEventListener('click', () => {

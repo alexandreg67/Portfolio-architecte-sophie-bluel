@@ -209,12 +209,13 @@ li:hover {
 	flex-direction: column;
 }
 
-#contact input, input {
+#contact input, input, select.input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label, label {
 	margin: 2em 0 1em 0;
 }
@@ -317,7 +318,7 @@ footer nav ul {
 	text-align: center;
     border-bottom: 1px solid #B3B3B3;
 	width: 80%;
-    margin: 40px auto 20px;
+    margin: 20px auto 20px;
 }
 
 .add-photo {
@@ -329,7 +330,7 @@ footer nav ul {
     cursor: pointer;
     display: block;
     width: 200px;
-    margin: 20px auto; 
+    margin: 10px auto 20px; 
 }
 
 .add-photo-content {

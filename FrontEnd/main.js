@@ -12,12 +12,25 @@ const modifier = document.querySelector(".modifier");
 const modal = document.querySelector("#modal");
 
 let allWorks = [];
+let uniqueCategories = [];
 
 // Au chargement de la page, on récupère les données de l'API
 window.addEventListener("load", () => {
     getData(url);
     displayLoggedInUser();
 });
+
+// const uniqueCategories = [
+//     categoryList = works.map(e => e.category.name);
+//     return [...new Set(categoryList)];
+// ];
+
+
+// Au chargement de la page, on récupère les données de l'API
+// window.addEventListener("load", () => {
+//     getData(url);
+//     displayLoggedInUser();
+// });
 
 login.addEventListener('click', () => {
     window.location.href = './connexion.html';
@@ -85,10 +98,10 @@ modifier.addEventListener('click', () => {
 
         const form = document.createElement("form");
         form.classList.add("add-photo-content");
-        form.action = "#"; // Assurez-vous de mettre l'URL appropriée pour traiter les données du formulaire
+        form.action = "#"; 
         form.method = "post";
 
-        // Création et ajout des champs Nom
+        // Création et ajout du champ titre
         const nameLabel = document.createElement("label");
         nameLabel.classList.add("label");
         nameLabel.setAttribute("for", "titre");
@@ -102,18 +115,39 @@ modifier.addEventListener('click', () => {
         nameInput.id = "titre";
         form.appendChild(nameInput);
 
+        // Création et ajout du champ description
+        const categoryLabel = document.createElement("label");
+        categoryLabel.classList.add("label"); 
+        categoryLabel.textContent = "Catégorie";
+        form.appendChild(categoryLabel);
 
+        const categorySelect = document.createElement("select");
+        categorySelect.classList.add("input"); 
+        categorySelect.name = "category";
+        categorySelect.id = "category";
+        form.appendChild(categorySelect);
 
-
-        // Création et ajout du bouton Envoyer
-        const submitInput = document.createElement("input");
-        submitInput.type = "submit";
-        submitInput.value = "Valider";
-        form.appendChild(submitInput);
+        // Création des options pour le select
+        uniqueCategories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
+        });
 
         modalContent.appendChild(form);
 
-        
+        const separator = document.createElement("div");
+        separator.classList.add("separator");
+        modalContent.appendChild(separator);
+
+        // Création et ajout du bouton Valider
+        const submitInput = document.createElement("input");
+        submitInput.type = "submit";
+        submitInput.value = "Valider";
+        submitInput.classList.add("add-photo");
+        modalContent.appendChild(submitInput);
+
 
         spanClose.addEventListener('click', () => {
             modal.style.display = "none";
@@ -134,15 +168,11 @@ modifier.addEventListener('click', () => {
     });
 });
 
-
-
-
 window.onclick = function(event) {
     if (event.target === modal) {
         modal.style.display = "none";
     }
 }
-
 
 async function getData(url) {
     try {
@@ -162,6 +192,7 @@ async function getData(url) {
         allWorks = data;
         createCategoryMenu(data);
         createGalleryItem(data);
+        createUniqueCategories(data);
     }
 }
 
@@ -184,6 +215,12 @@ function createGalleryItem(works) {
         figure.appendChild(figcaption);
         gallery.appendChild(figure);
     }
+}
+
+function createUniqueCategories(works) {
+    // On récupère les catégories uniques
+    const categoryList = works.map(e => e.category.name);
+    uniqueCategories = [...new Set(categoryList)];
 }
 
 function createCategoryMenu(works) {

@@ -1,8 +1,10 @@
+import { deleteWork, addWork } from "../libs/data.js";
+
+let imageURL;
+
 export function showModal(modal, allWorks) {
     modal.style.display = "block";
-
     createGalleryView(allWorks);
-
 };
     
 function createGalleryView(allWorks){
@@ -27,12 +29,24 @@ function createGalleryView(allWorks){
     modalGallery.innerHTML = "";
 
     for (const work of allWorks) {
+        const container = document.createElement("div");
+        container.classList.add("container-photo");
         const img = document.createElement("img");
 
         img.src = work.imageUrl;
         img.alt = work.title;
+        img.id = work.id;
 
-        modalGallery.appendChild(img);
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fa-regular", "fa-trash-can", "delete-icon");
+
+        container.appendChild(img);
+        container.appendChild(deleteIcon);
+        modalGallery.appendChild(container);
+        img.addEventListener('click', () => {
+            console.log("click sur l'image", work.id);
+            deleteWork(work.id);
+        });
     }
 
     modalContent.appendChild(modalGallery);
@@ -50,7 +64,6 @@ function createGalleryView(allWorks){
     btnAddPhoto.addEventListener('click', () => {
         createAddPhotoView(allWorks);
     });
-
 };
 
 function createAddPhotoView(allWorks){
@@ -94,6 +107,7 @@ function createAddPhotoView(allWorks){
     const btnAddPicture = document.createElement("button");
     btnAddPicture.textContent = "+ Ajouter une photo";
     btnAddPicture.classList.add("add-picture");
+    btnAddPicture.type = "file";
     containerAddPhoto.appendChild(btnAddPicture);
     const pAddPicture = document.createElement("p");
     pAddPicture.classList.add("add-picture-info");
@@ -101,6 +115,41 @@ function createAddPhotoView(allWorks){
     containerAddPhoto.appendChild(pAddPicture);
 
     form.appendChild(containerAddPhoto);
+
+    let inputPicture;
+
+    btnAddPicture.addEventListener('click', () => {
+        // console.log("click sur le bouton ajouter une photo");
+        btnAddPicture.style.display = "none";
+        inputPicture = document.createElement("input");
+        inputPicture.classList.add("input-picture");
+        inputPicture.style.display = "flex";
+        inputPicture.type = "file";
+        inputPicture.name = "imageUrl";
+        inputPicture.required = true;
+        containerAddPhoto.appendChild(inputPicture);
+        inputPicture.addEventListener('change', (e) => {
+            containerAddPhoto.innerHTML = "";
+            const file = e.target.files[0];
+
+            // Vérifier si un fichier a été sélectionné    
+            if (file) {
+                console.log("Fichier sélectionné :", file);
+                // Créez un objet URL à partir du fichier
+                const imageURL = URL.createObjectURL(file);
+                
+                // Créez un élément d'image pour afficher l'image
+                const imagePreview = document.createElement("img");
+                imagePreview.src = imageURL;
+                imagePreview.classList.add("image-preview");
+    
+                // Ajoutez l'aperçu de l'image au conteneur
+                containerAddPhoto.appendChild(imagePreview);
+            }else {
+                console.log("Aucune image sélectionnée.");
+            }
+        });
+    });
 
     // Création et ajout du champ titre
     const nameLabel = document.createElement("label");
@@ -136,15 +185,20 @@ function createAddPhotoView(allWorks){
     defaultOption.selected = true;
     categorySelect.appendChild(defaultOption);
 
+    // Récupération des catégories uniques
+    const uniqueCategories = [...new Set(allWorks.map(work => work.category.id))];
+
     // Création des options pour le select
-    const categoryList = allWorks.map(e => e.category.name);
-    const uniqueCategories = [...new Set(categoryList)];
-    for (const category of uniqueCategories) {
+    for (const categoryId of uniqueCategories) {
+        // Récupération de la catégorie correspondante
+        const category = allWorks.find(work => work.category.id === categoryId).category;
         const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
+        option.value = category.id;
+        // console.log("je log option.value", option.value);
+        option.textContent = category.name;
+        // console.log("je log option.textContent", option.textContent);
         categorySelect.appendChild(option);
-    };
+    }
     
     modalContent.appendChild(form);
     const separator = document.createElement("div");
@@ -154,20 +208,34 @@ function createAddPhotoView(allWorks){
     // Création et ajout du bouton Valider
     const submitBtn = document.createElement("button");
     submitBtn.type = "submit";
+    submitBtn.disabled = true;
     submitBtn.textContent = "Valider";
     submitBtn.classList.add("add-photo");
     submitBtn.style.backgroundColor = '#A7A7A7';
 
-    form.addEventListener('input', () => {
+    form.addEventListener('input', (e) => {
+        // inputPicture = document.querySelector('.input-picture');
         if (form.checkValidity()) {
+            submitBtn.disabled = false;
             submitBtn.style.backgroundColor = '#1D6154';
         } 
     });
 
     modalContent.appendChild(submitBtn);
 
-    submitBtn.addEventListener('click', (e) => {
+    submitBtn.addEventListener('click', async (e) => {
         e.preventDefault();
+        try {
+            if (inputPicture) {
+                // ajouter le travail
+                await addWork(inputPicture, nameInput, categorySelect);
+                
+                console.log("Travail ajouté avec succès !");
+            } else {
+                console.error('Submit btn : Aucune image sélectionnée.');
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'ajout du travail :", error);
+        }
     });
 };
-

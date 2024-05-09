@@ -1,5 +1,4 @@
-import { filterWorksByCategory } from "../views/gallery.js"
-
+import { createGalleryItem } from "./gallery.js";
 
 export function createCategoryMenu(allWorks, btnGroup) {
     // On récupère les catégories uniques
@@ -21,10 +20,20 @@ export function createCategoryMenu(allWorks, btnGroup) {
         const btn = document.createElement("button");
         btn.textContent = category;
         btn.classList.add("filter-btn");
-        btn.dataset.category = category;
+        btn.category = category;
         btn.addEventListener('click', () => {
             filterWorksByCategory(category, allWorks);
         });
         btnGroup.appendChild(btn);
     }
 }
+
+export function filterWorksByCategory(category, allWorks) {
+    if (category === "all") {
+        createGalleryItem(allWorks);
+    } else {
+        const filteredWorks = allWorks.filter(e => e.category.name === category);
+        createGalleryItem(filteredWorks);
+    }
+}
+

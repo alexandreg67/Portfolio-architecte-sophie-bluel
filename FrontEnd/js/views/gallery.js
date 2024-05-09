@@ -20,11 +20,3 @@ export function createGalleryItem(works) {
     }
 }
 
-export function filterWorksByCategory(category, allWorks) {
-    if (category === "all") {
-        createGalleryItem(allWorks);
-    } else {
-        const filteredWorks = allWorks.filter(e => e.category.name === category);
-        createGalleryItem(filteredWorks);
-    }
-}

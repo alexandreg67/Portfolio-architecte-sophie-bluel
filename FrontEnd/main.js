@@ -1,9 +1,9 @@
-import { getData } from './js/libs/getData.js';
-import { createGalleryItem, filterWorksByCategory } from './js/views/gallery.js';
+import { getWorks, deleteWork } from './js/libs/data.js';
+import { createGalleryItem } from './js/views/gallery.js';
+import { filterWorksByCategory } from './js/views/categories.js';
 import { createCategoryMenu } from './js/views/categories.js';
 import { isConnected } from './js/libs/users.js';
 import { showModal } from './js/views/modal.js';
-
 
 const url = "http://localhost:5678/api/works";
 const gallery = document.querySelector(".gallery");
@@ -16,14 +16,14 @@ const modal = document.querySelector("#modal");
 
 let allWorks = [];
 
-
 // Au chargement de la page, on récupère les données de l'API
 window.addEventListener("load", async () => {
     try {
-        allWorks = await getData(url);
+        allWorks = await getWorks(url);
         createCategoryMenu(allWorks, btnGroup, filterWorksByCategory);
         createGalleryItem(allWorks, gallery);
         isConnected(login, logout, modifier);
+        // console.log("je log allWorks", allWorks);
     } catch (error) {
         console.error(error);
     }
@@ -45,7 +45,7 @@ lienProjet.addEventListener('click', () => {
 });
 
 modifier.addEventListener('click', () => {
-    showModal(modal, allWorks);
+    showModal(modal, allWorks, deleteWork);
 });
 
 window.onclick = function(event) {

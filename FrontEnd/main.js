@@ -13,16 +13,18 @@ const login = document.querySelector(".lienLogin");
 const logout = document.querySelector(".lienLogout");
 const modifier = document.querySelector(".modifier");
 const modal = document.querySelector("#modal");
+const btnSubmit = document.querySelector('.btnSubmit');
+const editBanner = document.querySelector('.editBanner');
 
-let allWorks = [];
+window.allWorks = [];
 
 // Au chargement de la page, on récupère les données de l'API
 window.addEventListener("load", async () => {
     try {
-        allWorks = await getWorks(url);
-        createCategoryMenu(allWorks, btnGroup, filterWorksByCategory);
-        createGalleryItem(allWorks, gallery);
-        isConnected(login, logout, modifier);
+        window.allWorks = await getWorks(url);
+        createCategoryMenu(btnGroup, filterWorksByCategory);
+        createGalleryItem(window.allWorks);
+        isConnected(login, logout, modifier, editBanner);
         // console.log("je log allWorks", allWorks);
     } catch (error) {
         console.error(error);
@@ -30,22 +32,28 @@ window.addEventListener("load", async () => {
 });
 
 
-login.addEventListener('click', () => {
-    window.location.href = './connexion.html';
-});
+// login.addEventListener('click', () => {
+
+//         logout.style.display = 'block';
+//         editBanner.style.display = 'flex';
+//     }
+// );
 
 logout.addEventListener('click', () => {
     localStorage.removeItem('token');
     logout.style.display = 'none';
-    window.location.href = '../../index.html';
+    editBanner.style.display = 'none';
+    window.location.href = '/';
 });
 
-lienProjet.addEventListener('click', () => {
-    window.location.href = './index.html';
-});
+// lienProjet.addEventListener('click', () => {
+//     window.location.href = './index.html';
+// });
 
-modifier.addEventListener('click', () => {
-    showModal(modal, allWorks, deleteWork);
+modifier.addEventListener('click', async () => {
+    // allWorks = await getWorks(url);
+    // console.log("click sur modifier log allworks", allWorks);
+    showModal(modal, window.allWorks, deleteWork);
 });
 
 window.onclick = function(event) {

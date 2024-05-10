@@ -1,10 +1,14 @@
-export async function getWorks() {
+import { createGalleryItem } from "../views/gallery.js";
+import { createGalleryView } from "../views/modal.js";
+
+export async function getWorks(url) {
     try {
-        const response = await fetch("http://localhost:5678/api/works");
+        const response = await fetch(url);
         if (!response.ok) {
             throw Error(`${response.status}`);
         }
         const data = await response.json();
+        // console.log("je suis dans getWorks et je log data", data);
         return data;
     } catch (error) {
         console.error(error);
@@ -12,9 +16,9 @@ export async function getWorks() {
     }
 }
 
-export function deleteWork(id) {
-    console.log("je suis dans deleteWork avec l'id", id);
+export async function deleteWork(id) {
 
+    // Envoi de la requête DELETE à l'API
     fetch(`http://localhost:5678/api/works/${id}`, {
         method: 'DELETE',
         headers: {
@@ -26,7 +30,23 @@ export function deleteWork(id) {
     .then(response => {
         if (!response.ok) {
             throw Error(`${response.status}`);
+        }else{
+            console.log(`le travail avec l'id ${id} supprimé, response : ${response.status}`);
         }  
+    })
+    .then(() => {
+        // Mise à jour de la galerie
+        getWorks("http://localhost:5678/api/works")
+        .then(data => {
+            createGalleryView(data);
+            createGalleryItem(data);
+        })
+        .catch(error => {
+            console.error("Erreur lors de la récupération des works à l'API :", error);
+        });
+    })
+    .catch(error => {
+        console.error("Erreur lors de la suppression du work à l'API :", error);
     });
 }
 
@@ -47,13 +67,19 @@ export async function addWork(inputPicture, nameInput, categorySelect) {
                 'Authorization': `Bearer ${token}`,
             },
             body: formData,
-        });
-
-        console.log("je log response", response);
-
-        if (!response.ok) {
-            throw Error(`${response.status}`);
-        }
+        })
+        .then(() => {
+            // Mise à jour de la galerie
+            getWorks("http://localhost:5678/api/works")
+            .then(data => {
+                createGalleryView(data);
+                createGalleryItem(data);
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération des works à l'API :", error);
+            });
+        })
+        .catch(error => console.error(error));
     } catch (error) {
         console.error("Erreur lors de l'envoi du work à l'API :", error);
     }

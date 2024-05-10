@@ -53,6 +53,16 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
+.editBanner {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	height: 60px;
+	background-color: #000;
+	color: white;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -111,9 +121,15 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
-	color: #B1663C;
+nav li a {
+	text-decoration: none;
+	color: #000;
 }
+
+li a:hover {
+	font-weight: 600;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -171,7 +187,12 @@ li:hover {
     cursor: pointer;
 }
 
-.filter-btn:active {
+/* .filter-btn:active {
+	background-color: #1D6154;
+	color: #FFFFFF;
+} */
+
+.filter-btn.filter-btn-active {
 	background-color: #1D6154;
 	color: #FFFFFF;
 }

@@ -1,13 +1,12 @@
-import { deleteWork, addWork } from "../libs/data.js";
-
-let imageURL;
+import { deleteWork, addWork, getWorks } from "../libs/data.js";
 
 export function showModal(modal, allWorks) {
     modal.style.display = "block";
     createGalleryView(allWorks);
 };
     
-function createGalleryView(allWorks){
+export function createGalleryView(allWorks){
+    // console.log("je suis dans createGalleryView et je log allWorks", allWorks);
     const modalContent = document.querySelector(".modal-content");
     modalContent.innerHTML = ""; 
 
@@ -134,7 +133,7 @@ function createAddPhotoView(allWorks){
 
             // Vérifier si un fichier a été sélectionné    
             if (file) {
-                console.log("Fichier sélectionné :", file);
+                // console.log("Fichier sélectionné :", file);
                 // Créez un objet URL à partir du fichier
                 const imageURL = URL.createObjectURL(file);
                 
@@ -186,12 +185,12 @@ function createAddPhotoView(allWorks){
     categorySelect.appendChild(defaultOption);
 
     // Récupération des catégories uniques
-    const uniqueCategories = [...new Set(allWorks.map(work => work.category.id))];
+    const uniqueCategories = [...new Set(window.allWorks.map(work => work.category.id))];
 
     // Création des options pour le select
     for (const categoryId of uniqueCategories) {
         // Récupération de la catégorie correspondante
-        const category = allWorks.find(work => work.category.id === categoryId).category;
+        const category = window.allWorks.find(work => work.category.id === categoryId).category;
         const option = document.createElement("option");
         option.value = category.id;
         // console.log("je log option.value", option.value);
@@ -214,11 +213,14 @@ function createAddPhotoView(allWorks){
     submitBtn.style.backgroundColor = '#A7A7A7';
 
     form.addEventListener('input', (e) => {
-        // inputPicture = document.querySelector('.input-picture');
-        if (form.checkValidity()) {
+        inputPicture = document.querySelector('.input-picture');
+        if (form.checkValidity() && inputPicture !== null) {
             submitBtn.disabled = false;
             submitBtn.style.backgroundColor = '#1D6154';
-        } 
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.backgroundColor = '#A7A7A7';
+        }
     });
 
     modalContent.appendChild(submitBtn);

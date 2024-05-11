@@ -1,14 +1,22 @@
-const projets = document.querySelector('.lienProjets');
 const btnSubmit = document.querySelector('.btnSubmit');
-
-projets.addEventListener('click', () => {
-    window.location.href = './index.html';
-});
-
+const emailRequired = document.querySelector('.emailRequired');
+const passwordRequired = document.querySelector('.passwordRequired');
 
 btnSubmit.addEventListener('click', e => {
     e.preventDefault();
     displayLoggedInUser();
+
+    if (email.value === '') {
+        emailRequired.style.display = 'block';
+    }else {
+        emailRequired.style.display = 'none';
+    }
+
+    if (password.value === '') {
+        passwordRequired.style.display = 'block';
+    }else {
+        passwordRequired.style.display = 'none';
+    }
 });
 
 function displayLoggedInUser() {
@@ -32,11 +40,10 @@ function displayLoggedInUser() {
             localStorage.setItem('token', data.token);
             // Redirection vers la page d'accueil
             alert('Vous êtes connecté !');
-            window.location.href = './index.html';
+            window.location.href = '/';
         } else {
             alert('Erreur de connexion');
         }
     })
     .catch(error => console.error(error));
-
 };

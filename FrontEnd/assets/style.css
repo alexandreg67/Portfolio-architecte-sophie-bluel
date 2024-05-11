@@ -276,6 +276,12 @@ footer nav ul {
 	color: #3D3D3D;
 }
 
+.emailRequired, .passwordRequired {
+	display: none;
+	margin-top: 10px;
+	color: red;
+}
+
 
 /******* style de la fenêtre modale ********/
 

@@ -8,12 +8,10 @@ import { showModal } from './js/views/modal.js';
 const url = "http://localhost:5678/api/works";
 const gallery = document.querySelector(".gallery");
 const btnGroup = document.querySelector(".button-group");
-const lienProjet = document.querySelector(".lienProjets");
 const login = document.querySelector(".lienLogin");
 const logout = document.querySelector(".lienLogout");
 const modifier = document.querySelector(".modifier");
 const modal = document.querySelector("#modal");
-const btnSubmit = document.querySelector('.btnSubmit');
 const editBanner = document.querySelector('.editBanner');
 
 window.allWorks = [];
@@ -23,7 +21,7 @@ window.addEventListener("load", async () => {
     try {
         window.allWorks = await getWorks(url);
         createCategoryMenu(btnGroup, filterWorksByCategory);
-        createGalleryItem(window.allWorks);
+        createGalleryItem(window.allWorks, gallery);
         isConnected(login, logout, modifier, editBanner);
         // console.log("je log allWorks", allWorks);
     } catch (error) {
@@ -32,12 +30,12 @@ window.addEventListener("load", async () => {
 });
 
 
-// login.addEventListener('click', () => {
-
-//         logout.style.display = 'block';
-//         editBanner.style.display = 'flex';
-//     }
-// );
+login.addEventListener('click', () => {
+        logout.style.display = 'block';
+        editBanner.style.display = 'flex';
+        displayLoggedInUser();
+    }
+);
 
 logout.addEventListener('click', () => {
     localStorage.removeItem('token');
@@ -46,13 +44,7 @@ logout.addEventListener('click', () => {
     window.location.href = '/';
 });
 
-// lienProjet.addEventListener('click', () => {
-//     window.location.href = './index.html';
-// });
-
 modifier.addEventListener('click', async () => {
-    // allWorks = await getWorks(url);
-    // console.log("click sur modifier log allworks", allWorks);
     showModal(modal, window.allWorks, deleteWork);
 });
 

@@ -21,7 +21,7 @@ window.addEventListener("load", async () => {
     try {
         window.allWorks = await getWorks(url);
         createCategoryMenu(btnGroup, filterWorksByCategory);
-        createGalleryItem(window.allWorks, gallery);
+        createGalleryItem(window.allWorks);
         isConnected(login, logout, modifier, editBanner);
         // console.log("je log allWorks", allWorks);
     } catch (error) {

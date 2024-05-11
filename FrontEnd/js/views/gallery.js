@@ -1,4 +1,6 @@
-export function createGalleryItem(works, gallery) {
+const gallery = document.querySelector(".gallery");
+
+export function createGalleryItem(works) {
     // On vide la galerie
     gallery.innerHTML = "";
    

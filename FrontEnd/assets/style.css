@@ -276,7 +276,7 @@ footer nav ul {
 	color: #3D3D3D;
 }
 
-.emailRequired, .passwordRequired {
+.emailRequired, .passwordRequired {	
 	display: none;
 	margin-top: 10px;
 	color: red;
@@ -345,11 +345,17 @@ footer nav ul {
     cursor: pointer;
 }
 
+.error-message {
+	opacity: 0;
+	margin: 10px auto;
+	color: red;
+}
+
 .separator {
 	text-align: center;
     border-bottom: 1px solid #B3B3B3;
 	width: 80%;
-    margin: 20px auto 20px;
+    margin: 0px auto 20px;
 }
 
 .add-photo {

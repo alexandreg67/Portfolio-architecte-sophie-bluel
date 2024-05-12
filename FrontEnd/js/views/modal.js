@@ -1,8 +1,10 @@
-import { deleteWork, addWork, getWorks } from "../libs/data.js";
+import { deleteWork, addWork } from "../libs/data.js";
 
 export function showModal(modal, allWorks) {
+    // console.log("je suis dans showModal et je log allWorks", allWorks);
     modal.style.display = "block";
     createGalleryView(allWorks);
+    // createAddPhotoView(allWorks);
 };
     
 export function createGalleryView(allWorks){
@@ -112,28 +114,26 @@ function createAddPhotoView(allWorks){
     pAddPicture.classList.add("add-picture-info");
     pAddPicture.textContent = "jpg. png : 4mo max";
     containerAddPhoto.appendChild(pAddPicture);
+    const inputPicture = document.createElement("input");
+    inputPicture.classList.add("input-picture");
+    inputPicture.style.display = "none";
+    inputPicture.type = "file";
+    inputPicture.name = "imageUrl";
+    inputPicture.required = true;
+    containerAddPhoto.appendChild(inputPicture);
 
     form.appendChild(containerAddPhoto);
-
-    let inputPicture;
 
     btnAddPicture.addEventListener('click', () => {
         // console.log("click sur le bouton ajouter une photo");
         btnAddPicture.style.display = "none";
-        inputPicture = document.createElement("input");
-        inputPicture.classList.add("input-picture");
-        inputPicture.style.display = "flex";
-        inputPicture.type = "file";
-        inputPicture.name = "imageUrl";
-        inputPicture.required = true;
-        containerAddPhoto.appendChild(inputPicture);
+        inputPicture.style.display = "block";
         inputPicture.addEventListener('change', (e) => {
             containerAddPhoto.innerHTML = "";
             const file = e.target.files[0];
 
-            // Vérifier si un fichier a été sélectionné    
+            // Vérifier si un fichier a été sélectionné    q    
             if (file) {
-                // console.log("Fichier sélectionné :", file);
                 // Créez un objet URL à partir du fichier
                 const imageURL = URL.createObjectURL(file);
                 
@@ -148,6 +148,7 @@ function createAddPhotoView(allWorks){
                 console.log("Aucune image sélectionnée.");
             }
         });
+        
     });
 
     // Création et ajout du champ titre
@@ -198,6 +199,11 @@ function createAddPhotoView(allWorks){
         // console.log("je log option.textContent", option.textContent);
         categorySelect.appendChild(option);
     }
+
+    const errorMessage = document.createElement("p");
+    errorMessage.classList.add("error-message");
+    errorMessage.textContent = "Tous les champs sont obligatoires.";
+    form.appendChild(errorMessage);
     
     modalContent.appendChild(form);
     const separator = document.createElement("div");
@@ -212,30 +218,27 @@ function createAddPhotoView(allWorks){
     submitBtn.classList.add("add-photo");
     submitBtn.style.backgroundColor = '#A7A7A7';
 
+    modalContent.appendChild(submitBtn);
+
     form.addEventListener('input', (e) => {
-        inputPicture = document.querySelector('.input-picture');
-        if (form.checkValidity() && inputPicture !== null) {
+        if (form.checkValidity()) {
             submitBtn.disabled = false;
             submitBtn.style.backgroundColor = '#1D6154';
+            errorMessage.style.opacity = "0";
         } else {
             submitBtn.disabled = true;
+            errorMessage.style.opacity = "1";
             submitBtn.style.backgroundColor = '#A7A7A7';
         }
     });
 
-    modalContent.appendChild(submitBtn);
 
     submitBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         try {
-            if (inputPicture) {
-                // ajouter le travail
-                await addWork(inputPicture, nameInput, categorySelect);
-                
-                console.log("Travail ajouté avec succès !");
-            } else {
-                console.error('Submit btn : Aucune image sélectionnée.');
-            }
+            await addWork(inputPicture, nameInput, categorySelect);  
+            alert("Travail ajouté avec succès !");           
+            console.log("Travail ajouté avec succès !");
         } catch (error) {
             console.error("Erreur lors de l'ajout du travail :", error);
         }

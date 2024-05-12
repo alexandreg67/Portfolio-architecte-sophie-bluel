@@ -31,6 +31,7 @@ export async function deleteWork(id) {
         if (!response.ok) {
             throw Error(`${response.status}`);
         }else{
+            alert("Le travail a bien été supprimé");
             console.log(`le travail avec l'id ${id} supprimé, response : ${response.status}`);
         }  
     })
@@ -42,7 +43,7 @@ export async function deleteWork(id) {
             createGalleryItem(data);
         })
         .catch(error => {
-            console.error("Erreur lors de la récupération des works à l'API :", error);
+            console.error("Erreur lors de la mise à jour de la galerie :", error);
         });
     })
     .catch(error => {

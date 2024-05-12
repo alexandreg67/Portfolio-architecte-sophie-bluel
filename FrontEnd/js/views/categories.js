@@ -31,7 +31,6 @@ export function filterWorksByCategory(category) {
         createGalleryItem(window.allWorks);
     } else {
         const filteredWorks = window.allWorks.filter(e => e.category.name === category);
-        // console.log("je log filteredWorks", filteredWorks);
         createGalleryItem(filteredWorks);
     }
 }

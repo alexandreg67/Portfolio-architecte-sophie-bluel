@@ -8,13 +8,12 @@ const password = document.querySelector('#password');
 
 btnSubmit.addEventListener('click', e => {
     e.preventDefault();
-    console.log(email, password);
     displayLoggedInUser(email, password);
 
-    if (email.value === '') {
+    if (email.value === '' || !validateEmail(email.value)) {
         emailRequired.style.display = 'block';
     }else {
-        emailRequired.style.display = 'none';
+        emailRequired.style.display = 'none'; 
     }
 
     if (password.value === '') {
@@ -23,3 +22,10 @@ btnSubmit.addEventListener('click', e => {
         passwordRequired.style.display = 'none';
     }
 });
+
+// Fonction pour vérifier le format de l'email
+function validateEmail(email) {
+    // Expression régulière pour valider le format d'une adresse e-mail
+    var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}

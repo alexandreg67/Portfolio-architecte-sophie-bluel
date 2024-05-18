@@ -1,4 +1,4 @@
-import { getWorks, deleteWork } from './js/libs/data.js';
+import { getWorks } from './js/libs/data.js';
 import { createGalleryItem } from './js/views/gallery.js';
 import { filterWorksByCategory } from './js/views/categories.js';
 import { createCategoryMenu } from './js/views/categories.js';

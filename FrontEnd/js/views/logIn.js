@@ -8,19 +8,20 @@ const password = document.querySelector('#password');
 
 btnSubmit.addEventListener('click', e => {
     e.preventDefault();
-    displayLoggedInUser(email, password);
-
-    if (email.value === '' || !validateEmail(email.value)) {
+    
+    if (!validateEmail(email.value)) {
         emailRequired.style.display = 'block';
     }else {
         emailRequired.style.display = 'none'; 
     }
-
+    
     if (password.value === '') {
         passwordRequired.style.display = 'block';
     }else {
         passwordRequired.style.display = 'none';
     }
+
+    displayLoggedInUser(email, password);
 });
 
 // Fonction pour vérifier le format de l'email
@@ -29,3 +30,5 @@ function validateEmail(email) {
     var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
 }
+
+// /^.{6,20}$/ // Mot de passe entre 6 et 20 caractères

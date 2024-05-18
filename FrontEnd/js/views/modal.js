@@ -96,24 +96,26 @@ function createAddPhotoView(allWorks){
 
     const form = document.createElement("form");
     form.classList.add("add-photo-content");
-    form.action = "#"; 
-    form.method = "post";
 
     // Création et ajout du champ photo
     const containerAddPhoto = document.createElement("div");
     containerAddPhoto.classList.add("container-add-photo");
+    
     const iconPicture = document.createElement("i");
     iconPicture.classList.add("fa-regular", "fa-image");
     containerAddPhoto.appendChild(iconPicture);
+
     const btnAddPicture = document.createElement("button");
     btnAddPicture.textContent = "+ Ajouter une photo";
     btnAddPicture.classList.add("add-picture");
     btnAddPicture.type = "file";
     containerAddPhoto.appendChild(btnAddPicture);
+
     const pAddPicture = document.createElement("p");
     pAddPicture.classList.add("add-picture-info");
     pAddPicture.textContent = "jpg. png : 4mo max";
     containerAddPhoto.appendChild(pAddPicture);
+
     const inputPicture = document.createElement("input");
     inputPicture.classList.add("input-picture");
     inputPicture.style.display = "none";
@@ -132,7 +134,7 @@ function createAddPhotoView(allWorks){
             containerAddPhoto.innerHTML = "";
             const file = e.target.files[0];
 
-            // Vérifier si un fichier a été sélectionné    q    
+            // Vérifier si un fichier a été sélectionné        
             if (file) {
                 // Créez un objet URL à partir du fichier
                 const imageURL = URL.createObjectURL(file);
@@ -237,8 +239,8 @@ function createAddPhotoView(allWorks){
         e.preventDefault();
         try {
             await addWork(inputPicture, nameInput, categorySelect);  
-            alert("Travail ajouté avec succès !");           
             console.log("Travail ajouté avec succès !");
+            alert("Travail ajouté avec succès !");           
         } catch (error) {
             console.error("Erreur lors de l'ajout du travail :", error);
         }

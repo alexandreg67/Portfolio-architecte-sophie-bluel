@@ -35,20 +35,14 @@ export async function deleteWork(id) {
             console.log(`le travail avec l'id ${id} supprimé, response : ${response.status}`);
         }  
     })
-    .then(() => {
-        // Mise à jour de la galerie
-        getWorks("http://localhost:5678/api/works")
-        .then(data => {
-            createGalleryView(data);
-            createGalleryItem(data);
-        })
-        .catch(error => {
-            console.error("Erreur lors de la mise à jour de la galerie :", error);
-        });
-    })
     .catch(error => {
         console.error("Erreur lors de la suppression du work à l'API :", error);
     });
+
+    window.allWorks = window.allWorks.filter(work => work.id !== id);
+    createGalleryItem(window.allWorks);
+    createGalleryView(window.allWorks);
+
 }
 
 export async function addWork(inputPicture, nameInput, categorySelect) {
@@ -69,18 +63,22 @@ export async function addWork(inputPicture, nameInput, categorySelect) {
             },
             body: formData,
         })
-        .then(() => {
-            // Mise à jour de la galerie
-            getWorks("http://localhost:5678/api/works")
-            .then(data => {
-                createGalleryView(data);
-                createGalleryItem(data);
-            })
-            .catch(error => {
-                console.error("Erreur lors de la récupération des works à l'API :", error);
-            });
-        })
-        .catch(error => console.error(error));
+        const entity = await response.json();
+        // console.log("je suis dans addWork et je log entity", entity)
+        
+        let newWork = {
+            id: entity.id,
+            title: entity.title,
+            imageUrl: entity.imageUrl,
+            categoryId: entity.categoryId,
+            userId: entity.userId
+        }
+
+        window.allWorks.push(newWork);
+
+        createGalleryItem(window.allWorks);
+        createGalleryView(window.allWorks);
+
     } catch (error) {
         console.error("Erreur lors de l'envoi du work à l'API :", error);
     }
